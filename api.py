@@ -23,7 +23,17 @@ def submit(host, student_id, path):
                  {"student_id": student_id, "path": path})
 
 
-def _post(url, body):
+def heartbeat(host, student_id, timeout=3):
+    """POST /api/heartbeat — keepalive de presencia. Devuelve `(status, payload)`.
+
+    Timeout corto: si la red esta lenta no queremos atrasar el siguiente latido.
+    """
+    return _post(f"http://{host}:{SERVER_PORT}/api/heartbeat",
+                 {"student_id": student_id},
+                 timeout=timeout)
+
+
+def _post(url, body, timeout=_REQUEST_TIMEOUT):
     """POST JSON. Devuelve `(status_code, parsed_json_body)`.
 
     Si el servidor responde con error HTTP pero con cuerpo JSON
@@ -38,7 +48,7 @@ def _post(url, body):
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=_REQUEST_TIMEOUT) as resp:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
             return resp.status, json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         try:

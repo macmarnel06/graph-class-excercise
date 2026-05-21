@@ -15,6 +15,8 @@ Tú sólo necesitas:
 import json
 import os
 import sys
+import threading
+import time
 
 import api
 import config
@@ -23,6 +25,21 @@ import graph
 import student
 
 GRAPH_FILE = "topology.json"
+HEARTBEAT_INTERVAL_S = 5
+
+
+def _heartbeat_loop(host, student_id):
+    """Latido periodico para mantener el nodo marcado como 'en linea' en el servidor.
+
+    Corre como hilo daemon: se cierra automaticamente cuando el programa termina.
+    Errores de red se ignoran (best-effort).
+    """
+    while True:
+        time.sleep(HEARTBEAT_INTERVAL_S)
+        try:
+            api.heartbeat(host, student_id)
+        except Exception:
+            pass
 
 
 def main():
@@ -50,6 +67,13 @@ def main():
     if status != 200 or not payload.get("ok"):
         print("Abortando: el check-in fallo.")
         return 1
+
+    # Iniciar latidos para mantener el nodo en linea mientras el programa corra.
+    threading.Thread(
+        target=_heartbeat_loop,
+        args=(config.TEACHER_HOST, config.STUDENT_ID),
+        daemon=True,
+    ).start()
 
     # 2) Calcular la ruta (responsabilidad del estudiante)
     try:
