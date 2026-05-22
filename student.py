@@ -8,6 +8,7 @@ Este es el único archivo que necesitas editar (además de los valores
 STUDENT_ID y TEACHER_HOST en config.py).
 """
 
+import heapq
 
 def compute_path(graph, student_id, teacher_id):
     # Dijkstra
