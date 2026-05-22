@@ -43,14 +43,15 @@ def compute_path(graph, student_id, teacher_id):
     path.reverse()
     return path
 
+
 """
-    Devuelve una lista ordenada de ids de nodos representando una ruta
-    de costo mínimo desde `student_id` hasta `teacher_id`.
+Devuelve una lista ordenada de ids de nodos representando una ruta
+de costo mínimo desde `student_id` hasta `teacher_id`.
 
-    Ejemplo de retorno válido:
-        ["ang25525", "rtr11004", "rtr11007", "rtr11001", "arr11463"]
+Ejemplo de retorno válido:
+    ["ang25525", "rtr11004", "rtr11007", "rtr11001", "arr11463"]
 
-    El grafo es DIRIGIDO y de pesos POSITIVOS. La ruta debe:
+El grafo es DIRIGIDO y de pesos POSITIVOS. La ruta debe:
       - empezar en `student_id` y terminar en `teacher_id`,
       - usar sólo aristas dirigidas reales (cada par consecutivo debe
         ser una arista existente en `graph`),
@@ -71,5 +72,5 @@ def compute_path(graph, student_id, teacher_id):
     list[str]
         Lista de ids del path, en orden, desde `student_id` a `teacher_id`.
     """
-    # TODO: implementar el algoritmo de ruta más corta.
+   
     
